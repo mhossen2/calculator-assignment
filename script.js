@@ -47,3 +47,36 @@ numberButtons.forEach((btn) => {
   btn.addEventListener("click", () => inputDigit(btn.dataset.number));
 });
 
+//make the calculator work with operators
+let firstOperand = null;
+let operatorSelected = null;
+let waitingForSecondOperand = false;
+
+//operator buttons logic
+function handleOperator(nextOperator) {
+  const inputValue = parseFloat(displayValue);
+
+  if (operatorSelected && waitingForSecondOperand) {
+    operatorSelected = nextOperator;
+    return;
+  }
+
+  if (firstOperand === null) {
+    firstOperand = inputValue;
+  } else if (operatorSelected) {
+    // A pair is already waiting — evaluate it NOW, before starting the next one.
+    const result = operate(operatorSelected, firstOperand, inputValue);
+
+    if (typeof result === "string") {
+      handleError(result);
+      return;
+    }
+
+    displayValue = formatResult(result);
+    firstOperand = result;
+    updateDisplay();
+  }
+
+  waitingForSecondOperand = true;
+  operatorSelected = nextOperator;
+}
