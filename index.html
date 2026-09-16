@@ -20,7 +20,8 @@
     .buttons {display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px;}
      button {padding: 20px; font-size: 1.2em; cursor: pointer;}
     .operator {background-color: #f0ad4e; color: #fff;}
-    .equals {background-color: #5cb85c; color: #fff; grid-column: span 2;}
+    .equals {background-color: #5cb85c; color: #fff; grid-row: span 2;}
+    .zero {grid-column: span 2;}
     .clear {background-color: #d9534f; color: #fff;}  
   </style>
   <body>
@@ -48,7 +49,7 @@
       <button data-number="3">3</button>
       <button class="equals" data-action="equals">=</button>
 
-      <button data-number="0">0</button>
+      <button class="zero" data-number="0">0</button>
       <button data-action="decimal">.</button>
     </div>
   </div>
