@@ -14,19 +14,27 @@ function divide(a, b) {
     }
     return a / b;
 }
-function calculate(operation, a, b) {
-    switch (operation) {
-        case '+':
-            return add(a, b);
-        case '-':
-            return subtract(a, b);
-        case '*':
-            return multiply(a, b);
-        case '/':
-            return divide(a, b);
-        default:
-            throw new Error("Invalid operation");
+function operate(operation, a, b) {
+    try {
+        switch (operation) {
+            case '+':
+                return add(a, b);
+            case '-':
+                return subtract(a, b);
+            case '*':
+                return multiply(a, b);
+            case '/':
+                return divide(a, b);
+            default:
+                throw new Error("Invalid operation");
+        }
+    } catch (e) {
+        return e.message;
     }
+}
+
+function formatResult(result) {
+    return String(result);
 }
 
 // populate the calculator display
@@ -38,7 +46,12 @@ function updateDisplay() {
 }
 
 function inputDigit(digit) {
-  displayValue = displayValue === "0" ? digit : displayValue + digit;
+  if (waitingForSecondOperand) {
+    displayValue = digit;
+    waitingForSecondOperand = false;
+  } else {
+    displayValue = displayValue === "0" ? digit : displayValue + digit;
+  }
   updateDisplay();
 }
 
@@ -51,6 +64,14 @@ numberButtons.forEach((btn) => {
 let firstOperand = null;
 let operatorSelected = null;
 let waitingForSecondOperand = false;
+
+function handleError(message) {
+  displayValue = "Error";
+  updateDisplay();
+  firstOperand = null;
+  operatorSelected = null;
+  waitingForSecondOperand = false;
+}
 
 //operator buttons logic
 function handleOperator(nextOperator) {
@@ -104,4 +125,31 @@ operatorButtons.forEach((btn) => {
   btn.addEventListener("click", () => handleOperator(btn.dataset.operator));
 });
 
-document.querySelector("[data-equals]").addEventListener("click", handleEqual);
+document.querySelector("[data-action='equals']").addEventListener("click", handleEqual);
+
+function handleClear() {
+  displayValue = "0";
+  firstOperand = null;
+  operatorSelected = null;
+  waitingForSecondOperand = false;
+  updateDisplay();
+}
+
+function handleBackspace() {
+  displayValue = displayValue.length > 1 ? displayValue.slice(0, -1) : "0";
+  updateDisplay();
+}
+
+function handleDecimal() {
+  if (waitingForSecondOperand) {
+    displayValue = "0.";
+    waitingForSecondOperand = false;
+  } else if (!displayValue.includes(".")) {
+    displayValue += ".";
+  }
+  updateDisplay();
+}
+
+document.querySelector("[data-action='clear']").addEventListener("click", handleClear);
+document.querySelector("[data-action='backspace']").addEventListener("click", handleBackspace);
+document.querySelector("[data-action='decimal']").addEventListener("click", handleDecimal);
