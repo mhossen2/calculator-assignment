@@ -80,3 +80,28 @@ function handleOperator(nextOperator) {
   waitingForSecondOperand = true;
   operatorSelected = nextOperator;
 }
+
+function handleEqual() {
+    if (operatorSelected === null || waitingForSecondOperand) return;
+
+    const inputValue = parseFloat(displayValue);
+    const result = operate(operatorSelected, firstOperand, inputValue);
+
+    if (typeof result === "string") {
+        handleError(result);
+        return;
+    }
+
+    displayValue = formatResult(result);
+    updateDisplay();
+    firstOperand = result;
+    operatorSelected = null;
+    waitingForSecondOperand = false;
+}
+
+const operatorButtons = document.querySelectorAll("[data-operator]");
+operatorButtons.forEach((btn) => {
+  btn.addEventListener("click", () => handleOperator(btn.dataset.operator));
+});
+
+document.querySelector("[data-equals]").addEventListener("click", handleEqual);
