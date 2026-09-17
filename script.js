@@ -153,3 +153,12 @@ function handleDecimal() {
 document.querySelector("[data-action='clear']").addEventListener("click", handleClear);
 document.querySelector("[data-action='backspace']").addEventListener("click", handleBackspace);
 document.querySelector("[data-action='decimal']").addEventListener("click", handleDecimal);
+
+document.addEventListener("keydown", (e) => {
+  if (e.key >= "0" && e.key <= "9") inputDigit(e.key);
+  else if (e.key === ".") handleDecimal();
+  else if (["+", "-", "*", "/"].includes(e.key)) handleOperator(e.key);
+  else if (e.key === "Enter" || e.key === "=") handleEqual();
+  else if (e.key === "Backspace") handleBackspace();
+  else if (e.key === "Escape") handleClear();
+});
