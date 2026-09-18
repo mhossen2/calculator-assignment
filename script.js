@@ -39,6 +39,7 @@ function formatResult(result) {
 
 // populate the calculator display
 let displayValue = "0";
+let shouldResetDisplay = false;
 const display = document.getElementById("display");
 
 function updateDisplay() {
@@ -46,9 +47,10 @@ function updateDisplay() {
 }
 
 function inputDigit(digit) {
-  if (waitingForSecondOperand) {
+  if (waitingForSecondOperand || shouldResetDisplay) {
     displayValue = digit;
     waitingForSecondOperand = false;
+    shouldResetDisplay = false;
   } else {
     displayValue = displayValue === "0" ? digit : displayValue + digit;
   }
@@ -118,6 +120,7 @@ function handleEqual() {
     firstOperand = result;
     operatorSelected = null;
     waitingForSecondOperand = false;
+    shouldResetDisplay = true;
 }
 
 const operatorButtons = document.querySelectorAll("[data-operator]");
