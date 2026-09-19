@@ -34,6 +34,9 @@ function operate(operation, a, b) {
 }
 
 function formatResult(result) {
+  if (typeof result === 'number' && !Number.isInteger(result)) {
+    result = parseFloat(result.toPrecision(10))
+  }
   return String(result)
 }
 
@@ -44,6 +47,7 @@ const display = document.getElementById('display')
 
 function updateDisplay() {
   display.textContent = displayValue
+  display.style.fontSize = displayValue.length > 9 ? '1.2em' : '2em'
 }
 
 function inputDigit(digit) {

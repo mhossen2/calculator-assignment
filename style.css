@@ -15,6 +15,9 @@ body {
   font-size: 2em;
   padding: 10px;
   text-align: right;
+  box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
 }
 .buttons {
   display: grid;
